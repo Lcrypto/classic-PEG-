@@ -8,9 +8,9 @@ void Random::bubbleSort(int a[], int size)
   for(int pass=1; pass<size; pass++) {
     for(i=0;i<size-pass;i++)
       if(a[i]>a[i+1]){
-	temp=a[i];
-	a[i]=a[i+1];
-	a[i+1]=temp;
+    temp=a[i];
+    a[i]=a[i+1];
+    a[i+1]=temp;
       }
   }
 }

@@ -58,14 +58,14 @@ int main(int argc, char * argv[]){
     cout<<"                  TgtGirth==4, 6 ...; if very large, then greedy PEG (DEFAULT)       " <<endl;
     cout<<"                  IF sglConcent==0, TgtGirth is recommended to be set relatively small" <<endl;
     cout<<"                                                                                       " <<endl;
-	cout<<"         option:         -quickEnc QuickEnc                                         " <<endl;
-	cout<<"                         QuickEnc == 0 ----- no quick encoding (Richardson-Urbanke) form " <<endl;
-	cout<<"                         QuickEnc != 0 ----- quick encoding (Richardson-Urbanke) form " <<endl;
-	cout<<"                                                                                       " <<endl;
-	cout<<"         option:         -verbose Verbose	                                        " <<endl;
-	cout<<"                         Verbose == 0 ----- silent mode								 " <<endl;
-	cout<<"                         Verbose != 0 ----- verbose mode								 " <<endl;
-	cout<<"                                                                                       " <<endl;
+    cout<<"         option:         -quickEnc QuickEnc                                         " <<endl;
+    cout<<"                         QuickEnc == 0 ----- no quick encoding (Richardson-Urbanke) form " <<endl;
+    cout<<"                         QuickEnc != 0 ----- quick encoding (Richardson-Urbanke) form " <<endl;
+    cout<<"                                                                                       " <<endl;
+    cout<<"         option:         -verbose Verbose	                                        " <<endl;
+    cout<<"                         Verbose == 0 ----- silent mode								 " <<endl;
+    cout<<"                         Verbose != 0 ----- verbose mode								 " <<endl;
+    cout<<"                                                                                       " <<endl;
     cout<<" Remarks: File CodeName stores the generated PEG Tanner graph. The first line contains"<<endl;
     cout<<"          the block length, N. The second line defines the number of parity-checks, M."<<endl;
     cout<<"          The third line defines the number of columns of the compressed parity-check "<<endl;
@@ -88,31 +88,31 @@ int main(int argc, char * argv[]){
     cout<<"          is invoked, i.e. sglConcent==0, the girth might be weaken to some extent as    "<<endl;
     cout<<"          compared to the generic PEG algorithm.                                         "<<endl;
     cout<<"**********************************************************************************************"<<endl;
-	getchar();
+    getchar();
     exit(-1);
   }else {
     for(i=0;i<numArgs;i++){
       if (strcmp(argv[2*i+1], "-numM")==0) {
-	M=atoi(argv[2*i+2]);
+    M=atoi(argv[2*i+2]);
       } else if(strcmp(argv[2*i+1], "-numN")==0) {
-	N=atoi(argv[2*i+2]);
+    N=atoi(argv[2*i+2]);
       } else if(strcmp(argv[2*i+1], "-codeName")==0) {
-	strcpy_s(codeName, argv[2*i+2]); 
+    strcpy_s(codeName, argv[2*i+2]); 
       } else if(strcmp(argv[2*i+1], "-degFileName")==0) {
-	strcpy_s(degFileName, argv[2*i+2]); 
-	  } else if(strcmp(argv[2*i+1], "-checkDegFileName")==0) {
-	strcpy_s(checkDegFileName, argv[2*i+2]);
-	checkDegProvided = 1;
+    strcpy_s(degFileName, argv[2*i+2]); 
+      } else if(strcmp(argv[2*i+1], "-checkDegFileName")==0) {
+    strcpy_s(checkDegFileName, argv[2*i+2]);
+    checkDegProvided = 1;
       } else if(strcmp(argv[2*i+1], "-sglConcent")==0) {
-	sglConcent=atoi(argv[2*i+2]);
-	  } else if(strcmp(argv[2*i+1], "-quickEnc")==0) {
-	quickEnc=atoi(argv[2*i+2]);
+    sglConcent=atoi(argv[2*i+2]);
+      } else if(strcmp(argv[2*i+1], "-quickEnc")==0) {
+    quickEnc=atoi(argv[2*i+2]);
       } else if(strcmp(argv[2*i+1], "-tgtGirth")==0) {
-	targetGirth=atoi(argv[2*i+2]);
+    targetGirth=atoi(argv[2*i+2]);
       } else if(strcmp(argv[2*i+1], "-verbose")==0) {
-	verbose=atoi(argv[2*i+2]);
-	  } 
-	  else{
+    verbose=atoi(argv[2*i+2]);
+      } 
+      else{
     goto USE;
       }
     }
@@ -130,8 +130,8 @@ int main(int argc, char * argv[]){
   // Open input file
   ifstream infn(degFileName);
   if( !infn ){
-	cout << "\nCannot open file " << degFileName << endl; 
-	exit(-1); 
+    cout << "\nCannot open file " << degFileName << endl; 
+    exit(-1); 
   } 
   
   // Read number of distrinct variable degrees, actual degrees and corresponding ratios
@@ -141,19 +141,19 @@ int main(int argc, char * argv[]){
   degFrac = new double[m];  
   
   for( i = 0; i < m; i++ ){
-	infn >> deg[i];
+    infn >> deg[i];
   }
   
   for( i = 0; i < m; i++ ){
-	infn >> degFrac[i];
+    infn >> degFrac[i];
   }
-	
+    
   infn.close();  
   
   // Check if distribution is valid (i.e. ratios sum to 1)
   double dtmp = 0.0;
   for( i = 0; i < m; i++ ){
-	dtmp += degFrac[i];
+    dtmp += degFrac[i];
   }
   
   cout.setf(ios::fixed, ios::floatfield);
@@ -161,41 +161,41 @@ int main(int argc, char * argv[]){
   if( fabs(dtmp-1.0) > EPS) {
     cout.setf(ios::fixed, ios::floatfield);
     cout <<"\n Invalid variable degree distribution (node perspective): sum != 1.0 but "<< setprecision(10) << dtmp << endl; 
-	exit(-1); 
+    exit(-1); 
   } 
   
   // Assign degrees to variable nodes
   for( i = 1; i < m; i++){ 
-	degFrac[i] += degFrac[i-1];
+    degFrac[i] += degFrac[i-1];
   }
-	
+    
   for( i = 0; i < N; i++){
     dtmp = (double)i/N;
     for( j = m-1; j >= 0; j-- ){
       if( dtmp > degFrac[j] ){
-		break;
-	  }
+        break;
+      }
     }
     if( dtmp < degFrac[0] ){ 
-		degSeq[i] = deg[0];
-	}
+        degSeq[i] = deg[0];
+    }
     else{
-		degSeq[i] = deg[j+1];
-	}
+        degSeq[i] = deg[j+1];
+    }
   }
 
   // Slightly modify degrees of the first M variable nodes if quick encoding structured is desired: 
   // variable node 1 cannot have a degree larger than 1, variable node 2 cannot have a degree larger than 2 etc, due to upper diagonal form of the MxM submatrix of H
   if( quickEnc != 0 ){
-	for(i = 0; i < M; i++ ){
-		if( degSeq[i] > i + 1 ){
-			degSeq[i] = i + 1;
-		}
-	}	
+    for(i = 0; i < M; i++ ){
+        if( degSeq[i] > i + 1 ){
+            degSeq[i] = i + 1;
+        }
+    }	
   }
   
   for( i = 0; i < N; i++ )
-	varDegSeq[i] = degSeq[i];
+    varDegSeq[i] = degSeq[i];
   
   // Delete tables to be reused
   delete [] degSeq;
@@ -210,125 +210,125 @@ int main(int argc, char * argv[]){
   degSeq = new int[M];
   
   if( checkDegProvided == 1 ){
-	  
-	  checkDegSeq = new int[N];
+      
+      checkDegSeq = new int[N];
   
-	  // Open input file
-	  ifstream infn(checkDegFileName);
-	  if( !infn ){
-		cout << "\nCannot open file " << checkDegFileName << endl; 
-		exit(-1); 
-	  } 
-	  
-	  // Read number of distrinct check degrees, actual degrees and corresponding ratios
-	  infn >> m;
-	  noCheckDegs = m;
-	  deg = new int[m];
-	  degFrac = new double[m];  
-	  
-	  for( i = 0; i < m; i++ ){
-		infn >> deg[i];
-	  }
-	  for( i = 0; i < m; i++ ){
-		infn >> degFrac[i];
-	  }
-		
-	  infn.close();  
-	  
-	  // Check if distribution is valid (i.e. ratios sum to 1)
-	  double dtmp = 0.0;
-	  for( i = 0; i < m; i++ ){
-		dtmp += degFrac[i];
-	  }
-	  
-	  cout.setf(ios::fixed, ios::floatfield);
-	 
-	  if( fabs(dtmp-1.0) > EPS) {
-	    cout.setf(ios::fixed, ios::floatfield);
-	    cout <<"\n Invalid check degree distribution (node perspective): sum != 1.0 but "<< setprecision(10) << dtmp << endl; 
-		exit(-1); 
-	  }
-	  
-	  // Assign degrees to check nodes
-	  for( i = 1; i < m; i++){ 
-		degFrac[i] += degFrac[i-1];
-	  }
-		
-	  for( i = 0; i < M; i++){
-	    dtmp = (double)i/M;
-	    for( j = m-1; j >= 0; j-- ){
-	      if( dtmp > degFrac[j] ){
-			break;
-		  }
-	    }
-	    if( dtmp < degFrac[0] ){ 
-			degSeq[i] = deg[0];
-		}
-	    else{
-			degSeq[i] = deg[j+1];
-		}
-	  }
-	
-	  for( i = 0; i < M; i++ )
-		checkDegSeq[i] = degSeq[i];
-	
-	// CHECK IF RATE IS WITHIN A SMALL THRESHOLD GIVEN N AND M AND DISTRIBUTIONS
-	// IF IT IS, SLIGHTLY ADJUST CHECK NODE DISTRIBUTION IF NEEDED TO MAKE NUMBER OF CONNECTIONS ON BOTH SIDES EQUAL
-	
-	cout << endl;
-	
-	double nmRate = 0.0;
-	double distRate = 0.0;
-	
-	int varEdgeSum = 0;
-	float avgVarDeg = 0.0;
-	for( i = 0; i < N; i++ ){
-		varEdgeSum += varDegSeq[i];
-	}
-	
-	avgVarDeg = (float)varEdgeSum/float(N);
-	cout << "Total variable edges: \t\t" << varEdgeSum << endl;
-	cout << "Average variable node degree: \t" << avgVarDeg << endl;
-	
-	int checkEdgeSum = 0;
-	float avgCheckDeg = 0.0;
-	for( i = 0; i < M; i++ ){
-		checkEdgeSum += checkDegSeq[i];
-	}
-	avgCheckDeg = (float)checkEdgeSum/float(M);
-	cout << "Total check edges: \t\t" << checkEdgeSum << endl;
-	cout << "Average check node degree: \t" << avgCheckDeg << endl;
-	
-	nmRate = 1.0 - double(M)/(double)N;
-	distRate = 1.0 - avgVarDeg/avgCheckDeg;
-	
-	cout << "Rate based on N, M: \t\t" << nmRate << endl;
-	cout << "Rate based on distribution: \t" << distRate << endl;
-	
-	// Check if rates are compatible
-	if( fabs(nmRate-distRate) > EPS2) {
-	    cout.setf(ios::fixed, ios::floatfield);
-	    cout << endl << "Incompatible rates: " << endl; 
-		cout << "\tRate based on N, M: " << nmRate << endl;
-		cout << "\tRate based on distribution: " << distRate << endl;
-		exit(-1); 
-	  }
-	// If rates are compatible (i.e. difference less than 0.01), slightly adjust distributions to make edges equal on both sides if needed
-	else if( varEdgeSum != checkEdgeSum ){
-		cout << endl << "Rates compatible, slightly adjusting distribution to make number of edges equal on both sides... " << endl << endl;
-		int tempdif = 0;
-		// Slightly modify check distribution in order to make edges equal
-		if( varEdgeSum > checkEdgeSum ){
-			tempdif = varEdgeSum - checkEdgeSum;
-			for( i = 0; i < tempdif; i++ )
-				checkDegSeq[i] += 1;
-		}
-		else if( varEdgeSum < checkEdgeSum ){
-			tempdif = checkEdgeSum - varEdgeSum;
-			for( i = 0; i < tempdif; i++ )
-				checkDegSeq[i] -= 1;
-		}
-	}	
+      // Open input file
+      ifstream infn(checkDegFileName);
+      if( !infn ){
+        cout << "\nCannot open file " << checkDegFileName << endl; 
+        exit(-1); 
+      } 
+      
+      // Read number of distrinct check degrees, actual degrees and corresponding ratios
+      infn >> m;
+      noCheckDegs = m;
+      deg = new int[m];
+      degFrac = new double[m];  
+      
+      for( i = 0; i < m; i++ ){
+        infn >> deg[i];
+      }
+      for( i = 0; i < m; i++ ){
+        infn >> degFrac[i];
+      }
+        
+      infn.close();  
+      
+      // Check if distribution is valid (i.e. ratios sum to 1)
+      double dtmp = 0.0;
+      for( i = 0; i < m; i++ ){
+        dtmp += degFrac[i];
+      }
+      
+      cout.setf(ios::fixed, ios::floatfield);
+     
+      if( fabs(dtmp-1.0) > EPS) {
+        cout.setf(ios::fixed, ios::floatfield);
+        cout <<"\n Invalid check degree distribution (node perspective): sum != 1.0 but "<< setprecision(10) << dtmp << endl; 
+        exit(-1); 
+      }
+      
+      // Assign degrees to check nodes
+      for( i = 1; i < m; i++){ 
+        degFrac[i] += degFrac[i-1];
+      }
+        
+      for( i = 0; i < M; i++){
+        dtmp = (double)i/M;
+        for( j = m-1; j >= 0; j-- ){
+          if( dtmp > degFrac[j] ){
+            break;
+          }
+        }
+        if( dtmp < degFrac[0] ){ 
+            degSeq[i] = deg[0];
+        }
+        else{
+            degSeq[i] = deg[j+1];
+        }
+      }
+    
+      for( i = 0; i < M; i++ )
+        checkDegSeq[i] = degSeq[i];
+    
+    // CHECK IF RATE IS WITHIN A SMALL THRESHOLD GIVEN N AND M AND DISTRIBUTIONS
+    // IF IT IS, SLIGHTLY ADJUST CHECK NODE DISTRIBUTION IF NEEDED TO MAKE NUMBER OF CONNECTIONS ON BOTH SIDES EQUAL
+    
+    cout << endl;
+    
+    double nmRate = 0.0;
+    double distRate = 0.0;
+    
+    int varEdgeSum = 0;
+    float avgVarDeg = 0.0;
+    for( i = 0; i < N; i++ ){
+        varEdgeSum += varDegSeq[i];
+    }
+    
+    avgVarDeg = (float)varEdgeSum/float(N);
+    cout << "Total variable edges: \t\t" << varEdgeSum << endl;
+    cout << "Average variable node degree: \t" << avgVarDeg << endl;
+    
+    int checkEdgeSum = 0;
+    float avgCheckDeg = 0.0;
+    for( i = 0; i < M; i++ ){
+        checkEdgeSum += checkDegSeq[i];
+    }
+    avgCheckDeg = (float)checkEdgeSum/float(M);
+    cout << "Total check edges: \t\t" << checkEdgeSum << endl;
+    cout << "Average check node degree: \t" << avgCheckDeg << endl;
+    
+    nmRate = 1.0 - double(M)/(double)N;
+    distRate = 1.0 - avgVarDeg/avgCheckDeg;
+    
+    cout << "Rate based on N, M: \t\t" << nmRate << endl;
+    cout << "Rate based on distribution: \t" << distRate << endl;
+    
+    // Check if rates are compatible
+    if( fabs(nmRate-distRate) > EPS2) {
+        cout.setf(ios::fixed, ios::floatfield);
+        cout << endl << "Incompatible rates: " << endl; 
+        cout << "\tRate based on N, M: " << nmRate << endl;
+        cout << "\tRate based on distribution: " << distRate << endl;
+        exit(-1); 
+      }
+    // If rates are compatible (i.e. difference less than 0.01), slightly adjust distributions to make edges equal on both sides if needed
+    else if( varEdgeSum != checkEdgeSum ){
+        cout << endl << "Rates compatible, slightly adjusting distribution to make number of edges equal on both sides... " << endl << endl;
+        int tempdif = 0;
+        // Slightly modify check distribution in order to make edges equal
+        if( varEdgeSum > checkEdgeSum ){
+            tempdif = varEdgeSum - checkEdgeSum;
+            for( i = 0; i < tempdif; i++ )
+                checkDegSeq[i] += 1;
+        }
+        else if( varEdgeSum < checkEdgeSum ){
+            tempdif = checkEdgeSum - varEdgeSum;
+            for( i = 0; i < tempdif; i++ )
+                checkDegSeq[i] -= 1;
+        }
+    }	
   }
   
   bigGirth = new BigGirth(M, N, quickEnc, varDegSeq, checkDegSeq, codeName, sglConcent, targetGirth, verbose);
