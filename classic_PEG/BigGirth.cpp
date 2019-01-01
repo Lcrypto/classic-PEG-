@@ -34,12 +34,12 @@ BigGirth::BigGirth(void) { ; }
 BigGirth::BigGirth(int M, int N, int quickEnc, int *symbolDegSequence, int *checkDegSequence, char *filename, int sglConcent, int tgtGirth, int verbose){
   int i, j, k, m, index, localDepth=100;
   int *mid;
-	
+    
   H = NULL;
   
   EXPAND_DEPTH = (tgtGirth-4)/2; 
   if( EXPAND_DEPTH < 0 ) 
-	EXPAND_DEPTH = 0;
+    EXPAND_DEPTH = 0;
 
   //      corresponds to depth l in the PEG paper;  
   //      the target girth = 2*EXPAND_DEPTH+4
@@ -61,59 +61,59 @@ BigGirth::BigGirth(int M, int N, int quickEnc, int *symbolDegSequence, int *chec
 
   /* Set check node degrees according to the sequence obtained from the degree distribution, if provided */
   if( checkDegSequence != NULL ){
-	  for( i=0; i<M; i++ )
-	    nodesInGraph[i].initConnectionParityBit(checkDegSequence[i]);
+      for( i=0; i<M; i++ )
+        nodesInGraph[i].initConnectionParityBit(checkDegSequence[i]);
   }
   else{
-	  /* Compute parity check node distribution */
-	  
-	  // Get and set mean degree
-	  j = 0;
-	  for( k = 0; k < N; k++ ) 
-		j += symbolDegSequence[k];
-	  k = j/M;
-	  for( i = 0; i < M; i++ ) 
-		mid[i] = k;
-	  
-	  // Add remaining connections by increasing the degree of some check nodes as needed
-	  for( i = 0; i < j-k*M; i++ ) 
-		mid[i]++;
-	  
-	  // Check that total parity check node connections equal total variable node connections
-	  k = 0; 
-	  for( i = 0; i < M; i++ ) 
-		k += mid[i];
-	  if( k != j ) 
-		{cout<<"Wrong in computing maxDegParity!"<<endl;exit(-1);}
+      /* Compute parity check node distribution */
+      
+      // Get and set mean degree
+      j = 0;
+      for( k = 0; k < N; k++ ) 
+        j += symbolDegSequence[k];
+      k = j/M;
+      for( i = 0; i < M; i++ ) 
+        mid[i] = k;
+      
+      // Add remaining connections by increasing the degree of some check nodes as needed
+      for( i = 0; i < j-k*M; i++ ) 
+        mid[i]++;
+      
+      // Check that total parity check node connections equal total variable node connections
+      k = 0; 
+      for( i = 0; i < M; i++ ) 
+        k += mid[i];
+      if( k != j ) 
+        {cout<<"Wrong in computing maxDegParity!"<<endl;exit(-1);}
 
-	  /* If strictly concentrated parity check distribution is required, set check node degrees to the corresponding values, else set to a number that is practically not limiting (10.000) */
-	  for( i = 0; i < M; i++ ){
-	    if( sglConcent == 0 ) 
-			nodesInGraph[i].initConnectionParityBit(mid[i]);
-	    else  
-			nodesInGraph[i].initConnectionParityBit(); 
-	  } 
+      /* If strictly concentrated parity check distribution is required, set check node degrees to the corresponding values, else set to a number that is practically not limiting (10.000) */
+      for( i = 0; i < M; i++ ){
+        if( sglConcent == 0 ) 
+            nodesInGraph[i].initConnectionParityBit(mid[i]);
+        else  
+            nodesInGraph[i].initConnectionParityBit(); 
+      } 
   }
   /* Create graph */	  
   for(k = 0; k < N; k++ ){
     
-	if( quickEnc == 1 && k < M ){
-		nodesInGraph[k].connectionSymbolBit[0] = k;
-	}
-	else{
-		m = 1000000;
-		index = -1;
-		// Find check node with the smallest degree that does not exceed its assigned degree
-	    for(i = 0; i < M; i++ ){
-	      if( nodesInGraph[i].numOfConnectionParityBit < m && nodesInGraph[i].numOfConnectionParityBit < nodesInGraph[i].maxDegParity) {
-			m = nodesInGraph[i].numOfConnectionParityBit;
-			index = i;
-	      }
-	    }
-		// Make first connection
-	    nodesInGraph[k].connectionSymbolBit[0] = index;//least connections of parity bit
-	}
-	// Make rest of connections
+    if( quickEnc == 1 && k < M ){
+        nodesInGraph[k].connectionSymbolBit[0] = k;
+    }
+    else{
+        m = 1000000;
+        index = -1;
+        // Find check node with the smallest degree that does not exceed its assigned degree
+        for(i = 0; i < M; i++ ){
+          if( nodesInGraph[i].numOfConnectionParityBit < m && nodesInGraph[i].numOfConnectionParityBit < nodesInGraph[i].maxDegParity) {
+            m = nodesInGraph[i].numOfConnectionParityBit;
+            index = i;
+          }
+        }
+        // Make first connection
+        nodesInGraph[k].connectionSymbolBit[0] = index;//least connections of parity bit
+    }
+    // Make rest of connections
     int iter = 0; 
   ITER:
     localGirth[k] = 100;
@@ -121,18 +121,18 @@ BigGirth::BigGirth(int M, int N, int quickEnc, int *symbolDegSequence, int *chec
       nodesInGraph[k].connectionSymbolBit[m] = selectParityConnect(k, m, localDepth, quickEnc);
       localGirth[k] = ( localGirth[k] > localDepth ) ? localDepth : localGirth[k];      
       if(k > 0 && localGirth[k] < localGirth[k-1] && iter < 20){
-		iter++; 
-		goto ITER;
-	  }
+        iter++; 
+        goto ITER;
+      }
       if(localGirth[k] == 0 && iter < 30){
-		iter++; 
-		goto ITER;
-	  }
+        iter++; 
+        goto ITER;
+      }
     }
     if(verbose != 0) {
       cout<< "k=" << k << "  ";
       for( m = 0; m < nodesInGraph[k].numOfConnectionSymbolBit; m++ )
-		cout<<nodesInGraph[k].connectionSymbolBit[m] << " ";
+        cout<<nodesInGraph[k].connectionSymbolBit[m] << " ";
       cout << "LocalGirth=" << 2*localGirth[k] + 4;
       cout << endl;
      }
@@ -151,11 +151,11 @@ BigGirth::BigGirth(int M, int N, int quickEnc, int *symbolDegSequence, int *chec
   localDepth = 100;
   for( k = 0; k < N; k++ ){
     if( localGirth[k] < localDepth ) 
-		localDepth = localGirth[k];
+        localDepth = localGirth[k];
     if( localDepth == 100 ) 
-		cycleFile << "inf ";
+        cycleFile << "inf ";
     else 
-		cycleFile << 2*localDepth + 4 << " ";
+        cycleFile << 2*localDepth + 4 << " ";
   }
   cycleFile << endl;
   cycleFile.close();
@@ -172,7 +172,7 @@ BigGirth::BigGirth(int M, int N, int quickEnc, int *symbolDegSequence, int *chec
 BigGirth::~BigGirth(void) {
   if( H != NULL){
     for( int i = 0; i < M; i++ )
-		delete [] H[i];
+        delete [] H[i];
     delete [] H;
     H = NULL;
   }  
@@ -197,17 +197,17 @@ int BigGirth::selectParityConnect(int kthSymbol, int mthConnection, int & cycle,
   
   // Find existing connections to check nodes
   for( i = 0; i < mthConnection; i++ )
-	current[i] = nodesInGraph[kthSymbol].connectionSymbolBit[i];
+    current[i] = nodesInGraph[kthSymbol].connectionSymbolBit[i];
 
 LOOP:
   mincycles++;
   for( i = 0; i < M; i++ )
-	tmp[i] = 0;
-	
+    tmp[i] = 0;
+    
   //maintain 
   for( i = 0; i < mthConnection; i++ ) 
-	tmp[nodesInGraph[kthSymbol].connectionSymbolBit[i]] = 1;
-	
+    tmp[nodesInGraph[kthSymbol].connectionSymbolBit[i]] = 1;
+    
   for(i = 0; i < numCur; i++ ){
     for( j = 0; j < nodesInGraph[current[i]].numOfConnectionParityBit; j++ ){
       for(k = 0; k < nodesInGraph[nodesInGraph[current[i]].connectionParityBit[j]].numOfConnectionSymbolBit; k++ ){
@@ -220,175 +220,175 @@ LOOP:
   cpNumCur = 0;
   
   for( i = 0; i < M; i++ ){
-	if( tmp[i] == 1 )
-		cpNumCur++;
+    if( tmp[i] == 1 )
+        cpNumCur++;
     if( tmp[i] == 1 || nodesInGraph[i].numOfConnectionParityBit >= nodesInGraph[i].maxDegParity ) 
-		index++;   
+        index++;   
   }
   
   if( quickEnc == 1 && index == kthSymbol + 1 ){
-	index = M;
+    index = M;
   }
   
   //  Can not expand any more
   if( cpNumCur == numCur && index < M ){
     
-	// Ones in temp[] denote nodes that are rejected from selection
+    // Ones in temp[] denote nodes that are rejected from selection
     if( quickEnc == 1 && kthSymbol < M ){
-	
-		//additional handlement to select one having least connections
-	    j = 10000000; //dummy number
-	    for( i = 0; i < kthSymbol; i++ ){
-			if( tmp[i] == 0 && nodesInGraph[i].numOfConnectionParityBit < j && nodesInGraph[i].numOfConnectionParityBit < nodesInGraph[i].maxDegParity )
-				//j is smallest degree
-				j = nodesInGraph[i].numOfConnectionParityBit;
-	    }
-		
-		for( i = 0; i < kthSymbol; i++ ){
-			if( tmp[i] == 0){
-				if( nodesInGraph[i].numOfConnectionParityBit != j || nodesInGraph[i].numOfConnectionParityBit >= nodesInGraph[i].maxDegParity ){
-					tmp[i] = 1;
-				}
-			}
-	    }
-		for( i = kthSymbol; i < M; i++ )
-			tmp[i] = 1;
-	}
-	else{
-	
-		//additional handlement to select one having least connections
-	    j = 10000000; //dummy number
-	    for( i = 0; i < M; i++ ){
-			if( tmp[i] == 0 && nodesInGraph[i].numOfConnectionParityBit < j && nodesInGraph[i].numOfConnectionParityBit < nodesInGraph[i].maxDegParity )
-				//j is smallest degree
-				j = nodesInGraph[i].numOfConnectionParityBit;
-	    }
-		
-		for( i = 0; i < M; i++ ){
-			if( tmp[i] == 0){
-				if( nodesInGraph[i].numOfConnectionParityBit != j || nodesInGraph[i].numOfConnectionParityBit >= nodesInGraph[i].maxDegParity ){
-					tmp[i] = 1;
-				}
-			}
-	    }
-	}
-	
-	//index stores number of rejected nodes
+    
+        //additional handlement to select one having least connections
+        j = 10000000; //dummy number
+        for( i = 0; i < kthSymbol; i++ ){
+            if( tmp[i] == 0 && nodesInGraph[i].numOfConnectionParityBit < j && nodesInGraph[i].numOfConnectionParityBit < nodesInGraph[i].maxDegParity )
+                //j is smallest degree
+                j = nodesInGraph[i].numOfConnectionParityBit;
+        }
+        
+        for( i = 0; i < kthSymbol; i++ ){
+            if( tmp[i] == 0){
+                if( nodesInGraph[i].numOfConnectionParityBit != j || nodesInGraph[i].numOfConnectionParityBit >= nodesInGraph[i].maxDegParity ){
+                    tmp[i] = 1;
+                }
+            }
+        }
+        for( i = kthSymbol; i < M; i++ )
+            tmp[i] = 1;
+    }
+    else{
+    
+        //additional handlement to select one having least connections
+        j = 10000000; //dummy number
+        for( i = 0; i < M; i++ ){
+            if( tmp[i] == 0 && nodesInGraph[i].numOfConnectionParityBit < j && nodesInGraph[i].numOfConnectionParityBit < nodesInGraph[i].maxDegParity )
+                //j is smallest degree
+                j = nodesInGraph[i].numOfConnectionParityBit;
+        }
+        
+        for( i = 0; i < M; i++ ){
+            if( tmp[i] == 0){
+                if( nodesInGraph[i].numOfConnectionParityBit != j || nodesInGraph[i].numOfConnectionParityBit >= nodesInGraph[i].maxDegParity ){
+                    tmp[i] = 1;
+                }
+            }
+        }
+    }
+    
+    //index stores number of rejected nodes
     index = 0;
     for( i = 0; i < M; i++){
-		if( tmp[i] == 1) 
-			index++;
-	}
+        if( tmp[i] == 1) 
+            index++;
+    }
     //----------------------------------------------------------------
-	//M-index is number of candidate nodes
+    //M-index is number of candidate nodes
     j = (*myrandom).uniform(0, M-index) + 1; //randomly selected
     index = 0;
-	//Find randomly selected node and return it
+    //Find randomly selected node and return it
     for( i = 0; i < M; i++){
-		if( tmp[i] == 0 )
-			index++;
-		if( index == j ) 
-			break;
+        if( tmp[i] == 0 )
+            index++;
+        if( index == j ) 
+            break;
     }
     delete [] tmp; 
-	tmp = NULL;
+    tmp = NULL;
     delete [] current; 
-	current = NULL;
+    current = NULL;
     delete [] med;
-	med = NULL;
+    med = NULL;
     return(i);
   }
   // All nodes covered
   else if( index == M || mincycles > EXPAND_DEPTH){//covering all parity nodes or meet the upper bound on cycles
   // Expansion successful
-	
-	if( kthSymbol == 3 )
-		cout << "FULLY EXPANDED!" << endl;
-	
+    
+    if( kthSymbol == 3 )
+        cout << "FULLY EXPANDED!" << endl;
+    
     cycle = mincycles - 1;
     for( i = 0; i < M; i++ ) 
-		tmp[i] = 0;
-		
+        tmp[i] = 0;
+        
     for( i = 0;i < numCur; i++ ) 
-		tmp[current[i]] = 1;
-		
+        tmp[current[i]] = 1;
+        
     index = 0;
-	
-    for( i = 0; i < M; i++ ){
-		if( tmp[i] == 1 ) 
-			index++;
-	}
-	
-    if(index != numCur){
-		cout << "Error in the case of (index==M)" << endl;
-		exit(-1);
-	}
     
-	// Ones in temp[] denote nodes that are rejected from selection
+    for( i = 0; i < M; i++ ){
+        if( tmp[i] == 1 ) 
+            index++;
+    }
+    
+    if(index != numCur){
+        cout << "Error in the case of (index==M)" << endl;
+        exit(-1);
+    }
+    
+    // Ones in temp[] denote nodes that are rejected from selection
     if( quickEnc == 1 && kthSymbol < M ){	
-		//additional handlement to select one having least connections
-	    j = 10000000; 
-	    for( i = 0; i < kthSymbol; i++ ){
-	      if( tmp[i] == 0 && nodesInGraph[i].numOfConnectionParityBit < j && nodesInGraph[i].numOfConnectionParityBit < nodesInGraph[i].maxDegParity )
-			j = nodesInGraph[i].numOfConnectionParityBit;
-	    }
-		
-		for( i = 0; i < kthSymbol; i++ ){
-			if( tmp[i] == 0){
-				if( nodesInGraph[i].numOfConnectionParityBit != j || nodesInGraph[i].numOfConnectionParityBit >= nodesInGraph[i].maxDegParity ){
-					tmp[i] = 1;
-				}
-			}
-	    }
-		for( i = kthSymbol; i < M; i++ )
-			tmp[i] = 1;
-	}
-	else{
-		
-		//additional handlement to select one having least connections
-	    j = 10000000; 
-	    for( i = 0; i < M; i++ ){
-	      if( tmp[i] == 0 && nodesInGraph[i].numOfConnectionParityBit < j && nodesInGraph[i].numOfConnectionParityBit < nodesInGraph[i].maxDegParity )
-			j = nodesInGraph[i].numOfConnectionParityBit;
-	    }
-	
-		for( i = 0; i < M; i++ ){
-			if( tmp[i] == 0){
-				if( nodesInGraph[i].numOfConnectionParityBit != j || nodesInGraph[i].numOfConnectionParityBit >= nodesInGraph[i].maxDegParity ){
-					tmp[i] = 1;
-				}
-			}
-	    }
-	}
+        //additional handlement to select one having least connections
+        j = 10000000; 
+        for( i = 0; i < kthSymbol; i++ ){
+          if( tmp[i] == 0 && nodesInGraph[i].numOfConnectionParityBit < j && nodesInGraph[i].numOfConnectionParityBit < nodesInGraph[i].maxDegParity )
+            j = nodesInGraph[i].numOfConnectionParityBit;
+        }
+        
+        for( i = 0; i < kthSymbol; i++ ){
+            if( tmp[i] == 0){
+                if( nodesInGraph[i].numOfConnectionParityBit != j || nodesInGraph[i].numOfConnectionParityBit >= nodesInGraph[i].maxDegParity ){
+                    tmp[i] = 1;
+                }
+            }
+        }
+        for( i = kthSymbol; i < M; i++ )
+            tmp[i] = 1;
+    }
+    else{
+        
+        //additional handlement to select one having least connections
+        j = 10000000; 
+        for( i = 0; i < M; i++ ){
+          if( tmp[i] == 0 && nodesInGraph[i].numOfConnectionParityBit < j && nodesInGraph[i].numOfConnectionParityBit < nodesInGraph[i].maxDegParity )
+            j = nodesInGraph[i].numOfConnectionParityBit;
+        }
+    
+        for( i = 0; i < M; i++ ){
+            if( tmp[i] == 0){
+                if( nodesInGraph[i].numOfConnectionParityBit != j || nodesInGraph[i].numOfConnectionParityBit >= nodesInGraph[i].maxDegParity ){
+                    tmp[i] = 1;
+                }
+            }
+        }
+    }
       
     index = 0;
     for( i = 0; i < M; i++ ){ 
-		if( tmp[i] == 1 ) 
-			index++;
-	}
+        if( tmp[i] == 1 ) 
+            index++;
+    }
    
     j = (*myrandom).uniform(0, M-index) + 1;
     index = 0;
     for( i = 0; i < M; i++ ){
-		if( tmp[i] == 0 ) 
-			index++;
-		if( index == j ) 
-			break;
+        if( tmp[i] == 0 ) 
+            index++;
+        if( index == j ) 
+            break;
     }
-	
+    
     delete [] tmp; 
-	tmp = NULL;
+    tmp = NULL;
     delete [] current; 
-	current = NULL;
+    current = NULL;
     delete [] med;
-	med = NULL;
+    med = NULL;
     return(i);
   }
   else if( cpNumCur > numCur && index != M ){
   
-	if( kthSymbol == 3 ){
-		cout << "FURTHER EXPANDING" << endl;
-	}
+    if( kthSymbol == 3 ){
+        cout << "FURTHER EXPANDING" << endl;
+    }
   
     delete [] current;
     current = NULL;
@@ -396,23 +396,23 @@ LOOP:
     current = new int[numCur];
     index = 0;
     for( i = 0; i < M;i++ ){
-		if( tmp[i] == 1 ){
-			current[index] = i;
-			index++;
-		}
+        if( tmp[i] == 1 ){
+            current[index] = i;
+            index++;
+        }
     }
-	// Further expand
+    // Further expand
     goto LOOP;
   }
   else{
     cout << "Should not come to this point..." << endl;
     cout << "Error in BigGirth::selectParityConnect()" << endl;
     delete [] tmp; 
-	tmp = NULL;
+    tmp = NULL;
     delete [] current; 
-	current = NULL;
+    current = NULL;
     delete [] med;
-	med = NULL;
+    med = NULL;
     return(-1);
   }
 }
@@ -521,8 +521,8 @@ void BigGirth::writeToFile_Hcompressed(void){
   codefile << N << ' ' << M << ' ' << max_col;
   int zeros = max_col - 3;
   for(i=0; i<zeros; i++)
-	codefile << " 0";
-	
+    codefile << " 0";
+    
   codefile << endl;
   
   
@@ -559,16 +559,16 @@ void BigGirth::writeToFile(void){
     if(H[k][J[k-redun]]==0) {    
       d=k;
       for(i=k+1-redun;i<N;i++)
-	if(H[k][J[i]]!=0) {d=i;break;}
+    if(H[k][J[i]]!=0) {d=i;break;}
       if(d==k) {//full-zero row:delete this row
-	redun++;
-	Index[k]=1;
-	continue;
+    redun++;
+    Index[k]=1;
+    continue;
       }	
       else {//SWAP d column and k column in H matrix
-	imed=J[k-redun];
-	J[k-redun]=J[d];
-	J[d]=imed;
+    imed=J[k-redun];
+    J[k-redun]=J[d];
+    J[d]=imed;
       }
     }
     if(H[k][J[k-redun]]==0) {
@@ -577,10 +577,10 @@ void BigGirth::writeToFile(void){
     }
     else {
       for(i=k+1;i<M;i++){
-	if(H[i][J[k-redun]]!=0){
-	  for(j=k-redun;j<N;j++)
-	    H[i][J[j]]=(H[i][J[j]]+H[k][J[j]])%2;
-	}
+    if(H[i][J[k-redun]]!=0){
+      for(j=k-redun;j<N;j++)
+        H[i][J[j]]=(H[i][J[j]]+H[k][J[j]])%2;
+    }
       }
     }
   }
@@ -593,9 +593,9 @@ void BigGirth::writeToFile(void){
   for(i=0;i<M;i++){
     if(Index[i]==0){ // all-zero row
       for(j=0;j<N;j++)
-	itmp[j]=H[i][J[j]];
+    itmp[j]=H[i][J[j]];
       for(j=0;j<N;j++)
-	H[index][j]=itmp[j]; //Note: itmp can not be omitted here!!!
+    H[index][j]=itmp[j]; //Note: itmp can not be omitted here!!!
       index++;
     }
   }
@@ -604,8 +604,8 @@ void BigGirth::writeToFile(void){
   for(k=index-1;k>0;k--){
     for(i=k-1;i>=0;i--){
       if(H[i][k]==1)
-	for(j=k;j<N;j++)
-	  H[i][j]=(H[i][j]+H[k][j])%2;
+    for(j=k;j<N;j++)
+      H[i][j]=(H[i][j]+H[k][j])%2;
     }
   }  
  
@@ -637,9 +637,9 @@ void BigGirth::writeToFile(void){
     for(i=0;i<max_row;i++)  generator_compressed[i][j]=0;
     for(i=0;i<K;i++){
       if(generator[i][j]==1) {
-	generator_compressed[index][j]=i+1;
-	if(index>=max_row-1) break;
-	index++;
+    generator_compressed[index][j]=i+1;
+    if(index>=max_row-1) break;
+    index++;
       }
     }
   }
@@ -667,9 +667,9 @@ void BigGirth::writeToFile(void){
     index=0;
     for(j=0;j<N;j++){
       if(H[i][J[j]]==1) {
-	parityCheck_compressed[i][index]=j+1; 
-	if(index>=max_col-1) break;
-	index++;
+    parityCheck_compressed[i][index]=j+1; 
+    if(index>=max_col-1) break;
+    index++;
       }
     }
   }

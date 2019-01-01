@@ -61,8 +61,8 @@ CyclesOfGraph::CyclesOfGraph(int mm, int n, int *(*h)){
     index=0;
     for(j=0;j<M;j++){
       if(H[j][i]==1){
-	tmp[index]=j;
-	index++;
+    tmp[index]=j;
+    index++;
       }
     }
     nodesOfGraph[i].setSymbolConnections(index, tmp);
@@ -71,8 +71,8 @@ CyclesOfGraph::CyclesOfGraph(int mm, int n, int *(*h)){
     index=0;
     for(j=0;j<N;j++){
       if(H[i][j]==1){
-	tmp[index]=j;
-	index++;
+    tmp[index]=j;
+    index++;
       }
     }
     nodesOfGraph[i].setParityConnections(index, tmp);
@@ -81,17 +81,17 @@ CyclesOfGraph::CyclesOfGraph(int mm, int n, int *(*h)){
     index=0;
     for(j=0;j<nodesOfGraph[i].numOfSymbolConnections;j++){
       for(k=0;k<nodesOfGraph[nodesOfGraph[i].symbolConnections[j]].numOfParityConnections;k++){
-	int t=0;
-	for(m=0;m<index;m++){
-	  if(nodesOfGraph[nodesOfGraph[i].symbolConnections[j]].parityConnections[k]==tmp[m]){
-	    t=1; break;
-	  }
-	}
-	if(nodesOfGraph[nodesOfGraph[i].symbolConnections[j]].parityConnections[k]==i) t=1;
-	if(t==0) {
-	  tmp[index]=nodesOfGraph[nodesOfGraph[i].symbolConnections[j]].parityConnections[k];
-	  index++;
-	}
+    int t=0;
+    for(m=0;m<index;m++){
+      if(nodesOfGraph[nodesOfGraph[i].symbolConnections[j]].parityConnections[k]==tmp[m]){
+        t=1; break;
+      }
+    }
+    if(nodesOfGraph[nodesOfGraph[i].symbolConnections[j]].parityConnections[k]==i) t=1;
+    if(t==0) {
+      tmp[index]=nodesOfGraph[nodesOfGraph[i].symbolConnections[j]].parityConnections[k];
+      index++;
+    }
       }
     }
     nodesOfGraph[i].setSymbolMapping(index, tmp);
@@ -121,8 +121,8 @@ void CyclesOfGraph::getCyclesTable(void) {
     }
     for(j=0;j<nodesOfGraph[i].numOfSymbolConnections-1;j++){ //-1 because the graph is undirected
       for(k=0;k<nodesOfGraph[nodesOfGraph[i].symbolConnections[j]].numOfParityConnections;k++){
-	tmp[k]=nodesOfGraph[nodesOfGraph[i].symbolConnections[j]].parityConnections[k];
-	//cout<<tmp[k]<<" ";
+    tmp[k]=nodesOfGraph[nodesOfGraph[i].symbolConnections[j]].parityConnections[k];
+    //cout<<tmp[k]<<" ";
       }
       //cout<<endl;
       int cycles=2;
@@ -130,40 +130,40 @@ void CyclesOfGraph::getCyclesTable(void) {
     LOOP:
       imed=0;
       for(k=0;k<index;k++){
-	if(tmp[k]==i) continue;
-	//cout<<"k="<<k<<" "<<tmp[k]<<endl;
-	for(m=0;m<nodesOfGraph[tmp[k]].numOfSymbolConnections;m++){
-	  for(n=0;n<nodesOfGraph[i].numOfSymbolConnections;n++){
-	    if((n!=j)&&(nodesOfGraph[tmp[k]].symbolConnections[m]==nodesOfGraph[i].symbolConnections[n])){
-	      cycles+=2;
-	      goto OUTLOOP;
-	    }
-	  }
-	}
-	for(m=0;m<nodesOfGraph[tmp[k]].numOfSymbolMapping;m++){
-	  t=0;
-	  for(int l=0;l<imed;l++) {
-	    if(nodesOfGraph[tmp[k]].symbolMapping[m]==med[l]){
-	      t=1; break;
-	    }
-	  }
-	  if(t==0){
-	    med[imed]=nodesOfGraph[tmp[k]].symbolMapping[m];
-	    //cout<<med[imed]<<endl;
-	    imed++;
-	  }
-	}
+    if(tmp[k]==i) continue;
+    //cout<<"k="<<k<<" "<<tmp[k]<<endl;
+    for(m=0;m<nodesOfGraph[tmp[k]].numOfSymbolConnections;m++){
+      for(n=0;n<nodesOfGraph[i].numOfSymbolConnections;n++){
+        if((n!=j)&&(nodesOfGraph[tmp[k]].symbolConnections[m]==nodesOfGraph[i].symbolConnections[n])){
+          cycles+=2;
+          goto OUTLOOP;
+        }
+      }
+    }
+    for(m=0;m<nodesOfGraph[tmp[k]].numOfSymbolMapping;m++){
+      t=0;
+      for(int l=0;l<imed;l++) {
+        if(nodesOfGraph[tmp[k]].symbolMapping[m]==med[l]){
+          t=1; break;
+        }
+      }
+      if(t==0){
+        med[imed]=nodesOfGraph[tmp[k]].symbolMapping[m];
+        //cout<<med[imed]<<endl;
+        imed++;
+      }
+    }
       }
       index=imed;//cout<<index<<" "<<endl;
       for(k=0;k<index;k++) {
-	tmp[k]=med[k];//cout<<tmp[k]<<" ";
+    tmp[k]=med[k];//cout<<tmp[k]<<" ";
       }
       //cout<<"j="<<j<<endl;
       cycles+=2;
       if(cycles>=2*N) //dead lock 
-	goto OUTLOOP;
+    goto OUTLOOP;
       else
-	goto LOOP;
+    goto LOOP;
     OUTLOOP:
       tmpCycles[j]=cycles;
     }
@@ -172,7 +172,7 @@ void CyclesOfGraph::getCyclesTable(void) {
     cyclesTable[i]=tmpCycles[0];
     for(j=1;j<nodesOfGraph[i].numOfSymbolConnections-1;j++){
       if(cyclesTable[i]>tmpCycles[j])
-	cyclesTable[i]=tmpCycles[j];
+    cyclesTable[i]=tmpCycles[j];
     }
     //OUTPUT cycles per symbol node
     //cout<<"i="<<i<<" "<<cyclesTable[i]<<endl;
