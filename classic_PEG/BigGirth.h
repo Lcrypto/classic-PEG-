@@ -1,26 +1,8 @@
 #ifndef BIGGIRTH
 #define BIGGIRTH
 
-#include <stdlib.h>
-#include <iostream> // C++ I/O library header
-#include "Random.h"
-
-using namespace std;
-
-class NodesInGraph{
- public:
-  int numOfConnectionParityBit;
-  int *connectionParityBit;
-  int numOfConnectionSymbolBit;
-  int *connectionSymbolBit;
-  int maxDegParity;
-
-  NodesInGraph(void);
-  ~NodesInGraph(void);
-  void setNumOfConnectionSymbolBit(int deg);
-  void initConnectionParityBit(void);
-  void initConnectionParityBit(int deg);
-};
+class NodesInGraph;
+class Random;
 
 class BigGirth {
  public:

@@ -1,33 +1,62 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <iostream>
-#include <fstream>
 #include "BigGirth.h"
 #include "Random.h"
 
-NodesInGraph::NodesInGraph(void) {;}
+#include <cstdio>
+#include <cstdlib>
+#include <iostream>
+#include <fstream>
+
+
+using namespace std;
+
+class NodesInGraph {
+public:
+  NodesInGraph();
+  ~NodesInGraph();
+
+public:
+  void setNumOfConnectionSymbolBit(int deg);
+  void initConnectionParityBit(int deg = 10000);
+
+public:
+  int numOfConnectionParityBit;
+  int *connectionParityBit;
+  int numOfConnectionSymbolBit;
+  int *connectionSymbolBit;
+  int maxDegParity;
+};
+
+NodesInGraph::NodesInGraph()
+  : connectionParityBit( NULL )
+  , connectionSymbolBit( NULL )
+  , numOfConnectionParityBit( 0 )
+  , numOfConnectionSymbolBit( 0 )
+{
+
+}
+
+NodesInGraph::~NodesInGraph() 
+{
+  if(connectionParityBit!=NULL)
+    delete [] connectionParityBit;
+
+  if(connectionSymbolBit!=NULL)
+    delete [] connectionSymbolBit;
+}
 
 void NodesInGraph::setNumOfConnectionSymbolBit(int deg) {
   if(deg<=0) {cout<<"Wrong NodesInGraph::setNumOfConnectionSymbolBit()"<<endl;exit(-1);}
   numOfConnectionSymbolBit=deg;
   connectionSymbolBit=new int[deg];
 }
-void NodesInGraph::initConnectionParityBit(void) {
-  maxDegParity=10000;
-  numOfConnectionParityBit=0;
-  connectionParityBit=new int[1];//dummy memory, actually not used
-}
-void NodesInGraph::initConnectionParityBit(int deg) {
+
+void NodesInGraph::initConnectionParityBit(int deg) 
+{
   maxDegParity=deg;
   numOfConnectionParityBit=0;
   connectionParityBit=new int[1];//dummy memory, actually not used
 }
-NodesInGraph::~NodesInGraph(void) {
-  if(connectionParityBit!=NULL)
-    delete [] connectionParityBit;
-  if(connectionSymbolBit!=NULL)
-    delete [] connectionSymbolBit;
-}
+
 
 BigGirth::BigGirth(void) { ; }
 
