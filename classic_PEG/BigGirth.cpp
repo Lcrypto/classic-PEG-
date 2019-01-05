@@ -52,11 +52,28 @@ void NodesInGraph::initConnectionParityBit(int deg) {
 }
 
 
-BigGirth::BigGirth(void) { ; }
+class BigGirth::MatrixInt2D {
+public:
+  typedef int ValueType;
+
+public:
+  MatrixInt2D( std::size_t rowCount, std::size_t colCount ) 
+    : m_rowCount( rowCount ), m_colCount( colCount ), m_data( 0, rowCount * colCount ) { }
+
+  std::size_t GetColCount() const { return m_colCount; }
+  std::size_t GetRowCount() const { return m_rowCount; }
+
+  ValueType* operator[] ( std::size_t row ) { return &m_data[ row * m_colCount ]; } 
+
+private:
+  std::valarray< ValueType > m_data;
+  std::size_t m_rowCount;
+  std::size_t m_colCount;
+};
 
 BigGirth::BigGirth(int M, int N, int quickEnc, int *symbolDegSequence, int *checkDegSequence, char *filename, int sglConcent, int tgtGirth, int verbose){
   int i, j, k, m, index, localDepth=100;
-  int *mid;
+  std::valarray< int > mid;
     
   H = NULL;
   
@@ -68,17 +85,17 @@ BigGirth::BigGirth(int M, int N, int quickEnc, int *symbolDegSequence, int *chec
   //      the target girth = 2*EXPAND_DEPTH+4
   //      if set large, then GREEDY algorithm
 
-  myrandom = new Random();  //(12345678l, 987654321lu);
+  myrandom.reset( new Random() );  //(12345678l, 987654321lu);
 
   (*this).M = M;
   (*this).N = N;
   (*this).filename = filename;
 
-  mid = new int[M];
-  localGirth = new int[N];
+  mid.resize( M );
+  localGirth.resize( N );
   
   /* Set variable node degrees according to the sequence obtained from the degree distribution */
-  nodesInGraph = new NodesInGraph [N];
+  nodesInGraph.resize( N );
   for( i=0; i < N; ++i )
     nodesInGraph[i].setNumOfConnectionSymbolBit(symbolDegSequence[i]);
 
@@ -166,7 +183,8 @@ BigGirth::BigGirth(int M, int N, int quickEnc, int *symbolDegSequence, int *chec
   for( i = 0; i < M; ++i )
     cout << nodesInGraph[i].numOfConnectionParityBit() << " ";
   cout << endl;
-  delete [] mid;
+
+  mid.resize( 0 );
   
   // Write log to file
   ofstream cycleFile;
@@ -192,31 +210,26 @@ BigGirth::BigGirth(int M, int N, int quickEnc, int *symbolDegSequence, int *chec
 
 }
 
-BigGirth::~BigGirth(void) {
-  if( H != NULL){
-    for( int i = 0; i < M; ++i )
-        delete [] H[i];
-    delete [] H;
-    H = NULL;
-  }  
-  delete [] localGirth;
-  delete [] nodesInGraph;
-  nodesInGraph = NULL;
-  delete myrandom;
+BigGirth::~BigGirth() {
+  H.reset();  
+  localGirth.resize( 0 );
+  nodesInGraph.clear();
+  myrandom.reset();
 }
 
 int BigGirth::selectParityConnect(int kthSymbol, int mthConnection, int & cycle, int quickEnc) {
   int i, j, k, index, mincycles, numCur, cpNumCur;
 
-  int *tmp, *med;
-  int *current;//take note of the covering parity bits
+  std::valarray< int > tmp;
+  std::valarray< int > med;
+  std::valarray< int > current; //take note of the covering parity bits
 
   mincycles = 0;
-  tmp = new int[M]; 
-  med = new int[M];
+  tmp.resize( M ); 
+  med.resize( M );
 
   numCur = mthConnection;
-  current = new int[mthConnection];
+  current.resize( mthConnection );
   
   // Find existing connections to check nodes
   for( i = 0; i < mthConnection; ++i )
@@ -313,12 +326,7 @@ LOOP:
         if( index == j ) 
             break;
     }
-    delete [] tmp; 
-    tmp = NULL;
-    delete [] current; 
-    current = NULL;
-    delete [] med;
-    med = NULL;
+
     return(i);
   }
   // All nodes covered
@@ -399,12 +407,6 @@ LOOP:
             break;
     }
     
-    delete [] tmp; 
-    tmp = NULL;
-    delete [] current; 
-    current = NULL;
-    delete [] med;
-    med = NULL;
     return(i);
   }
   else if( cpNumCur > numCur && index != M ){
@@ -413,10 +415,8 @@ LOOP:
         cout << "FURTHER EXPANDING" << endl;
     }
   
-    delete [] current;
-    current = NULL;
     numCur = cpNumCur;
-    current = new int[numCur];
+    current.resize( numCur );
     index = 0;
     for( i = 0; i < M;i++ ){
         if( tmp[i] == 1 ){
@@ -430,12 +430,7 @@ LOOP:
   else{
     cout << "Should not come to this point..." << endl;
     cout << "Error in BigGirth::selectParityConnect()" << endl;
-    delete [] tmp; 
-    tmp = NULL;
-    delete [] current; 
-    current = NULL;
-    delete [] med;
-    med = NULL;
+
     return(-1);
   }
 }
@@ -443,12 +438,13 @@ LOOP:
 
 void BigGirth::updateConnection(int kthSymbol){
   int i, j, m;
-  int *tmp;
+  
+  std::valarray< int > tmp;
 
   for(i=0;i<nodesInGraph[kthSymbol].numOfConnectionSymbolBit();++i){
     m=nodesInGraph[kthSymbol].connectionSymbolBits[i];//m [0, M) parity node
     NodesInGraph & nodesInGraphCurrent = nodesInGraph[m];
-    tmp=new int[nodesInGraphCurrent.numOfConnectionParityBit()+1];
+    tmp.resize( nodesInGraphCurrent.numOfConnectionParityBit()+1 );
     for(j=0;j<nodesInGraphCurrent.numOfConnectionParityBit();++j)
       tmp[j]=nodesInGraphCurrent.connectionParityBits[j];
     tmp[nodesInGraphCurrent.numOfConnectionParityBit()]=kthSymbol;
@@ -458,28 +454,26 @@ void BigGirth::updateConnection(int kthSymbol){
 
     for(j=0;j<nodesInGraph[m].numOfConnectionParityBit();++j)
       nodesInGraph[m].connectionParityBits[j]=tmp[j];
-    delete [] tmp;
-    tmp=NULL;
+
+    tmp.resize( 0 );
   }
 }
 
-void BigGirth::loadH(void){
+void BigGirth::loadH(){
   int i, j;
   
-  if(H==NULL) {
-    H=new int*[M];
-    for(i=0;i<M;i++) H[i]=new int[N];
-  }
+  if(!H)
+    H.reset( new MatrixInt2D( M, N ) );
   
   for(i=0;i<M;i++){
     for(j=0;j<N;j++){
-      H[i][j]=0;
+      (*H)[i][j]=0;
     }
   }
     
   for(i=0;i<M;i++){
     for(j=0;j<nodesInGraph[i].numOfConnectionParityBit();j++){
-      H[i][nodesInGraph[i].connectionParityBits[j]]=1;
+      (*H)[i][nodesInGraph[i].connectionParityBits[j]]=1;
     }
   }
 }
@@ -501,7 +495,7 @@ void BigGirth::writeToFile_Hmatrix(void){
 
   for(i=0;i<M;i++){
     for(j=0;j<N;j++){
-      codefile<<H[i][j]<<" ";
+      codefile<<(*H)[i][j]<<" ";
     }
     codefile<<endl;
   }
@@ -510,8 +504,7 @@ void BigGirth::writeToFile_Hmatrix(void){
 
 void BigGirth::writeToFile_Hcompressed(void){
   int i, j, max_col;
-  int *(*parityCheck_compressed);
-
+  
   //cout<<"---------------code format--------------------------"<<endl;
   //cout<<"-            Block length N                        -"<<endl;
   //cout<<"-            Num of Check Nodex M                  -"<<endl;
@@ -526,11 +519,12 @@ void BigGirth::writeToFile_Hcompressed(void){
     if(nodesInGraph[i].numOfConnectionParityBit()>max_col) 
       max_col=nodesInGraph[i].numOfConnectionParityBit();
 
-  parityCheck_compressed=new int * [M];
-  for(i=0;i<M;i++)
-    parityCheck_compressed[i]=new int[max_col];
+  MatrixInt2D parityCheck_compressed( M, max_col );
+
   for(i=0;i<M;i++){
-    for(j=0;j<max_col;j++) parityCheck_compressed[i][j]=0;
+    for(j=0;j<max_col;j++) 
+      parityCheck_compressed[i][j]=0;
+
     for(j=0;j<nodesInGraph[i].numOfConnectionParityBit();j++){
       parityCheck_compressed[i][j]=nodesInGraph[i].connectionParityBits[j]+1; 
     }
@@ -556,33 +550,33 @@ void BigGirth::writeToFile_Hcompressed(void){
   }
   codefile.close();
 
-  for(i=0;i<M;i++){
-    delete [] parityCheck_compressed[i];
-    parityCheck_compressed[i]=NULL;
-  }
-  delete [] parityCheck_compressed;
-  parityCheck_compressed=NULL;
 }
 
-void BigGirth::writeToFile(void){
+void BigGirth::writeToFile(){
   int i, j, k, d, redun;
   int imed, max_row, index, max_col;
-  int *Index, *J, *itmp, *(*generator), *(*generator_compressed), *(*parityCheck_compressed);
+  
+  std::valarray< int > Index; 
+  std::valarray< int > J; 
+  std::valarray< int > itmp; 
+  
   //Gaussian Ellimination    
-  Index=new int[M];
-  J=new int[N];
-  itmp=new int[N];
-  for(i=0;i<M;i++) Index[i]=0; //indicator of redudant rows 
-  for(j=0;j<N;j++) J[j]=j; //column permutation
+  
+  Index.resize( M );
+  J.resize( N );
+  itmp.resize( N );
+
+  Index = 0; //indicator of redudant rows 
+  J = j; //column permutation
   redun=0;//the number of redundant rows
 
   loadH();
   
   for(k=0;k<M;k++){
-    if(H[k][J[k-redun]]==0) {    
+    if((*H)[k][J[k-redun]]==0) {    
       d=k;
       for(i=k+1-redun;i<N;i++)
-    if(H[k][J[i]]!=0) {d=i;break;}
+    if((*H)[k][J[i]]!=0) {d=i;break;}
       if(d==k) {//full-zero row:delete this row
     redun++;
     Index[k]=1;
@@ -594,15 +588,15 @@ void BigGirth::writeToFile(void){
     J[d]=imed;
       }
     }
-    if(H[k][J[k-redun]]==0) {
+    if((*H)[k][J[k-redun]]==0) {
       cout<<"ERROR: should not come to this point"<<endl;
       exit(-1);
     }
     else {
       for(i=k+1;i<M;i++){
-    if(H[i][J[k-redun]]!=0){
+    if((*H)[i][J[k-redun]]!=0){
       for(j=k-redun;j<N;j++)
-        H[i][J[j]]=(H[i][J[j]]+H[k][J[j]])%2;
+        (*H)[i][J[j]]=((*H)[i][J[j]]+(*H)[k][J[j]])%2;
     }
       }
     }
@@ -616,9 +610,9 @@ void BigGirth::writeToFile(void){
   for(i=0;i<M;i++){
     if(Index[i]==0){ // all-zero row
       for(j=0;j<N;j++)
-    itmp[j]=H[i][J[j]];
+    itmp[j]=(*H)[i][J[j]];
       for(j=0;j<N;j++)
-    H[index][j]=itmp[j]; //Note: itmp can not be omitted here!!!
+    (*H)[index][j]=itmp[j]; //Note: itmp can not be omitted here!!!
       index++;
     }
   }
@@ -626,24 +620,21 @@ void BigGirth::writeToFile(void){
 
   for(k=index-1;k>0;k--){
     for(i=k-1;i>=0;i--){
-      if(H[i][k]==1)
+      if((*H)[i][k]==1)
     for(j=k;j<N;j++)
-      H[i][j]=(H[i][j]+H[k][j])%2;
+      (*H)[i][j]=((*H)[i][j]+(*H)[k][j])%2;
     }
   }  
  
   cout<<"****************************************************"<<endl;
   cout<<"      Computing the compressed generator"<<endl;
   cout<<"****************************************************"<<endl;
-  generator=new int * [K];
-  for(i=0;i<K;i++)
-    generator[i]=new int[N-K];
+  
+  MatrixInt2D generator( K, N-K );
+  
   for(i=0;i<K;i++){
     for(j=0;j<N-K;j++)
-      generator[i][j]=H[j][i+N-K];
-    //for(j=N-K;j<N;j++)
-    //generator[i][j]=0;
-    //generator[i][i+N-K]=1;
+      generator[i][j]=(*H)[j][i+N-K];
   } 
   max_row=0;
   for(j=0;j<N-K;j++){
@@ -652,9 +643,9 @@ void BigGirth::writeToFile(void){
       imed+=generator[i][j];
     if(imed>max_row) max_row=imed;
   }
-  generator_compressed=new int * [max_row];
-  for(i=0;i<max_row;i++)
-    generator_compressed[i]=new int[N];
+
+  MatrixInt2D generator_compressed( max_row, N );
+
   for(j=0;j<N-K;j++){
     index=0;
     for(i=0;i<max_row;i++)  generator_compressed[i][j]=0;
@@ -679,17 +670,17 @@ void BigGirth::writeToFile(void){
   for(i=0;i<M;i++){
     imed=0;
     for(j=0;j<N;j++)
-      imed+=H[i][j];
+      imed+=(*H)[i][j];
     if(imed>max_col) max_col=imed;
   }
-  parityCheck_compressed=new int * [M];
-  for(i=0;i<M;i++)
-    parityCheck_compressed[i]=new int[max_col];
+
+  MatrixInt2D parityCheck_compressed( M, max_col );
+
   for(i=0;i<M;i++){
     for(j=0;j<max_col;j++) parityCheck_compressed[i][j]=0;
     index=0;
     for(j=0;j<N;j++){
-      if(H[i][J[j]]==1) {
+      if((*H)[i][J[j]]==1) {
     parityCheck_compressed[i][index]=j+1; 
     if(index>=max_col-1) break;
     index++;
@@ -721,33 +712,13 @@ void BigGirth::writeToFile(void){
   codefile<<endl;
 
   codefile.close();
-   cout<<"****************************************************"<<endl;
+  cout<<"****************************************************"<<endl;
   cout<<"      Free memory"<<endl;
   cout<<"****************************************************"<<endl;
-  delete [] Index;
-  Index=NULL;
-  delete [] J;
-  J=NULL;
-  delete [] itmp;
-  itmp=NULL;
-  for(i=0;i<M;i++){
-    delete [] parityCheck_compressed[i];
-    parityCheck_compressed[i]=NULL;
-  }
-  delete [] parityCheck_compressed;
-  parityCheck_compressed=NULL;
-  for(i=0;i< max_row; ++i){
-    delete [] generator_compressed[i];
-    generator_compressed[i]=NULL;
-  }
-  delete [] generator_compressed;
-  generator_compressed=NULL;
-  for(i=0;i<K; ++i){
-    delete [] generator[i];
-    generator[i]=NULL;
-  }
-  delete [] generator;
-  generator=NULL;
+
+  Index.resize( 0 );
+  J.resize( 0 );
+  itmp.resize( 0 );
   
   cout<<"****************************************************"<<endl;
   cout<<"      OK!"<<endl;
