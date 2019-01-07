@@ -1,0 +1,1 @@
+classic_PEG.exe -numM 252 -numN 504 -codeName 20.dat -degFileName DenEvl_20.deg
