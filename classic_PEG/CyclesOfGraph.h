@@ -1,26 +1,9 @@
-#ifndef CYCLESOFGRAPG
-#define CYCLESOFGRAPG
+#ifndef CYCLESOFGRAPH
+#define CYCLESOFGRAPH
 
-#include <stdlib.h>
-#include <iostream> // C++ I/O library header
-//#include <iomanip.h>
 
-using namespace std;
+class NodesOfGraph;
 
-class NodesOfGraph{
- public:
-  int numOfParityConnections;
-  int *parityConnections;
-  int numOfSymbolConnections;
-  int *symbolConnections;
-  int numOfSymbolMapping;
-  int *symbolMapping;
-  NodesOfGraph(void);
-  ~NodesOfGraph(void);
-  void setParityConnections(int num, int *value);
-  void setSymbolConnections(int num, int *value);
-  void setSymbolMapping(int num, int *values);
-}; //Why this is necessary?
 
 class CyclesOfGraph {
  public:
@@ -38,5 +21,3 @@ class CyclesOfGraph {
 };
 
 #endif
-
-
