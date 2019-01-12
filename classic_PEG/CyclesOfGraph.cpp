@@ -1,41 +1,52 @@
 #include "CyclesOfGraph.h"
+#include <cstdlib>
+#include <iostream>
+#include <valarray>
+#include <algorithm>
 
-NodesOfGraph::NodesOfGraph(void) {//parityConnections=NULL;symbolConnections=NULL;
-}
-NodesOfGraph::~NodesOfGraph(void) {
-  delete [] parityConnections;
-  delete [] symbolConnections;
-  delete [] symbolMapping;
+
+using namespace std;
+
+class NodesOfGraph{
+public:
+  NodesOfGraph();
+  ~NodesOfGraph();
+
+  int GetNumOfParityConnections() const { return int( parityConnections.size() ); }
+  int GetNumOfSymbolConnections() const { return int( symbolConnections.size() ); }
+  int GetNumOfSymbolMapping() const { return int( symbolMapping.size() ); }
+
+  std::valarray< int > parityConnections;
+  std::valarray< int > symbolConnections;
+  std::valarray< int > symbolMapping;
+
+  void setParityConnections(int num, int *values);
+  void setSymbolConnections(int num, int *values);
+  void setSymbolMapping(int num, int *values);
+};
+
+
+NodesOfGraph::NodesOfGraph() = default;
+
+NodesOfGraph::~NodesOfGraph() = default;
+
+void NodesOfGraph::setParityConnections(int num, int *values) 
+{
+  parityConnections.resize( num );
+  std::memcpy( &parityConnections[0], values, num );
 }
 
-void NodesOfGraph::setParityConnections(int num, int *value) {
-  numOfParityConnections=num;
-  parityConnections=new int[num];
-  for(int i=0;i<numOfParityConnections;i++){
-    parityConnections[i]=value[i];
-    //cout<<parityConnections[i]<<" ";
-  }
-  //cout<<endl;
+void NodesOfGraph::setSymbolConnections(int num, int *values) 
+{
+  symbolConnections.resize( num );
+  std::memcpy( &symbolConnections[0], values, num );
 }
-void NodesOfGraph::setSymbolConnections(int num, int *value) {
-  numOfSymbolConnections=num;
-  symbolConnections=new int[num];
-  for(int i=0;i<numOfSymbolConnections;i++){
-    symbolConnections[i]=value[i];
-    //cout<<symbolConnections[i]<<" ";
-  }
-  //cout<<endl;
+void NodesOfGraph::setSymbolMapping(int num, int *values) 
+{
+  symbolMapping.resize( num );
+  std::memcpy( &symbolMapping[0], values, num );
 }
-void NodesOfGraph::setSymbolMapping(int num, int *value) {
-  numOfSymbolMapping=num;
-  //cout<<num<<endl;
-  symbolMapping=new int[num];
-  for(int i=0;i<numOfSymbolMapping;i++){
-    symbolMapping[i]=value[i];
-    //cout<<symbolMapping[i]<<" ";
-  }
-  //cout<<endl;
-}
+
 
 CyclesOfGraph::CyclesOfGraph(int mm, int n, int *(*h)){
   int i, j, k, m, index;
@@ -79,8 +90,8 @@ CyclesOfGraph::CyclesOfGraph(int mm, int n, int *(*h)){
   }
   for(i=0;i<N;i++){
     index=0;
-    for(j=0;j<nodesOfGraph[i].numOfSymbolConnections;j++){
-      for(k=0;k<nodesOfGraph[nodesOfGraph[i].symbolConnections[j]].numOfParityConnections;k++){
+    for(j=0;j<nodesOfGraph[i].GetNumOfSymbolConnections();j++){
+      for(k=0;k<nodesOfGraph[nodesOfGraph[i].symbolConnections[j]].GetNumOfParityConnections();k++){
     int t=0;
     for(m=0;m<index;m++){
       if(nodesOfGraph[nodesOfGraph[i].symbolConnections[j]].parityConnections[k]==tmp[m]){
@@ -115,32 +126,32 @@ void CyclesOfGraph::getCyclesTable(void) {
   int i, j, k, m, n, t, imed;
   for(i=0;i<N;i++){
     //special handlement for nodes having only one or zero connections
-    if(nodesOfGraph[i].numOfSymbolConnections<=1) {
+    if(nodesOfGraph[i].GetNumOfSymbolConnections()<=1) {
       cyclesTable[i]=2*N; 
       continue;
     }
-    for(j=0;j<nodesOfGraph[i].numOfSymbolConnections-1;j++){ //-1 because the graph is undirected
-      for(k=0;k<nodesOfGraph[nodesOfGraph[i].symbolConnections[j]].numOfParityConnections;k++){
+    for(j=0;j<nodesOfGraph[i].GetNumOfSymbolConnections()-1;j++){ //-1 because the graph is undirected
+      for(k=0;k<nodesOfGraph[nodesOfGraph[i].symbolConnections[j]].GetNumOfParityConnections();k++){
     tmp[k]=nodesOfGraph[nodesOfGraph[i].symbolConnections[j]].parityConnections[k];
     //cout<<tmp[k]<<" ";
       }
       //cout<<endl;
       int cycles=2;
-      int index=nodesOfGraph[nodesOfGraph[i].symbolConnections[j]].numOfParityConnections;
+      int index=nodesOfGraph[nodesOfGraph[i].symbolConnections[j]].GetNumOfParityConnections();
     LOOP:
       imed=0;
       for(k=0;k<index;k++){
     if(tmp[k]==i) continue;
     //cout<<"k="<<k<<" "<<tmp[k]<<endl;
-    for(m=0;m<nodesOfGraph[tmp[k]].numOfSymbolConnections;m++){
-      for(n=0;n<nodesOfGraph[i].numOfSymbolConnections;n++){
+    for(m=0;m<nodesOfGraph[tmp[k]].GetNumOfSymbolConnections();m++){
+      for(n=0;n<nodesOfGraph[i].GetNumOfSymbolConnections();n++){
         if((n!=j)&&(nodesOfGraph[tmp[k]].symbolConnections[m]==nodesOfGraph[i].symbolConnections[n])){
           cycles+=2;
           goto OUTLOOP;
         }
       }
     }
-    for(m=0;m<nodesOfGraph[tmp[k]].numOfSymbolMapping;m++){
+    for(m=0;m<nodesOfGraph[tmp[k]].GetNumOfSymbolMapping();m++){
       t=0;
       for(int l=0;l<imed;l++) {
         if(nodesOfGraph[tmp[k]].symbolMapping[m]==med[l]){
@@ -167,10 +178,10 @@ void CyclesOfGraph::getCyclesTable(void) {
     OUTLOOP:
       tmpCycles[j]=cycles;
     }
-    //for(j=0;j<nodesOfGraph[i].numOfSymbolConnections-1;j++) cout<<tmpCycles[j]<<" ";
+    //for(j=0;j<nodesOfGraph[i].GetNumOfSymbolConnections()-1;j++) cout<<tmpCycles[j]<<" ";
     //cout<<endl;
     cyclesTable[i]=tmpCycles[0];
-    for(j=1;j<nodesOfGraph[i].numOfSymbolConnections-1;j++){
+    for(j=1;j<nodesOfGraph[i].GetNumOfSymbolConnections()-1;j++){
       if(cyclesTable[i]>tmpCycles[j])
     cyclesTable[i]=tmpCycles[j];
     }

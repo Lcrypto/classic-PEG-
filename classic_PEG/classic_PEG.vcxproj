@@ -142,9 +142,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="BigGirth.h" />
     <ClInclude Include="CyclesOfGraph.h" />
     <ClInclude Include="Random.h" />
