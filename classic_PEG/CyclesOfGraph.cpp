@@ -1,4 +1,25 @@
 #include "CyclesOfGraph.h"
+#include <cstdlib>
+#include <iostream> 
+
+
+using namespace std;
+
+
+class NodesOfGraph{
+public:
+  int numOfParityConnections;
+  int *parityConnections;
+  int numOfSymbolConnections;
+  int *symbolConnections;
+  int numOfSymbolMapping;
+  int *symbolMapping;
+  NodesOfGraph(void);
+  ~NodesOfGraph(void);
+  void setParityConnections(int num, int *value);
+  void setSymbolConnections(int num, int *value);
+  void setSymbolMapping(int num, int *values);
+};
 
 NodesOfGraph::NodesOfGraph(void) {//parityConnections=NULL;symbolConnections=NULL;
 }
