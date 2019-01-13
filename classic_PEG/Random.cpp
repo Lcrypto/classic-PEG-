@@ -1,18 +1,22 @@
-
-#include <math.h>
 #include "Random.h"
 
-void Random::bubbleSort(int a[], int size)
+#include <cstdlib>
+#include <cmath>
+#include <iostream>
+#include <algorithm>
+
+
+Random::Random()
+  : m_seed{ 987'654'321 }, m_seed_u{ 123'456'789 }
 {
-  int i, temp;
-  for(int pass=1; pass<size; pass++) {
-    for(i=0;i<size-pass;i++)
-      if(a[i]>a[i+1]){
-    temp=a[i];
-    a[i]=a[i+1];
-    a[i+1]=temp;
-      }
-  }
+
+}
+
+Random::~Random() = default;
+
+void Random::Sort(int a[], int size)
+{
+  return std::sort( a, a + size );
 }
 
 double Random::gauss(double sdev, double mean)
@@ -20,8 +24,8 @@ double Random::gauss(double sdev, double mean)
   double sum=0.0;
   for (int i=1;i<=12;i++)
     { 
-      seed_u = 1664525lu * seed_u + 123456789lu; 
-      sum=sum+double(seed_u); 
+      m_seed_u = 1664525lu * m_seed_u + 123456789lu; 
+      sum=sum+double(m_seed_u); 
     }
   return (double(sum)/4.29497e9-6.0)*sdev+mean;
 }
@@ -30,11 +34,11 @@ double Random::uniform(double a, double b)
 {
   double t;
   for(int i=0; i<10;i++){
-    seed=2045*seed+1;
+    m_seed=2045*m_seed+1;
     //seed=seed -(seed/1048576)*1048576;
-    seed%=1048576;
+    m_seed%=1048576;
   }
-  t=seed/1048576.0;
+  t=m_seed/1048576.0;
   t=a+(b-a)*t;
   return(t);
 }
@@ -45,11 +49,11 @@ int Random::uniform(int  a, int b) // [a, b-1]
   int i, tt;
   if(b==a+1) return(a);
   for(i=0; i<10;i++){
-    seed=2045*seed+1;
+    m_seed=2045*m_seed+1;
     //seed=seed -(seed/1048576)*1048576;
-    seed%=1048576;
+    m_seed%=1048576;
   }
-  t=seed/1048576.0;
+  t=m_seed/1048576.0;
   t=a+(b-a)*t;
   tt=(int)t;
   if(tt<a) tt=a;
@@ -63,11 +67,11 @@ int Random::nonUniform(int  a, int b) // [a, b-1]
   int i, tt;
   if(b==a+1) return(a);
   for(i=0; i<10;i++){
-    seed=2045*seed+1;
+    m_seed=2045*m_seed+1;
     //seed=seed -(seed/1048576)*1048576;
-    seed%=1048576;
+    m_seed%=1048576;
   }
-  t=seed/1048576.0;
+  t=m_seed/1048576.0;
   t=a+(b-a)*pow(t, 0.6667); //t^1.5 
   tt=(int)t;
   if(tt<a) tt=a;
