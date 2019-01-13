@@ -6,13 +6,11 @@
 #include <valarray>
 
 
+class MatrixInt2D;
 class NodesInGraph;
 class Random;
 
 class BigGirth {
-public:
-  class MatrixInt2D;
-
 public:
   BigGirth(int m, int n, int quickEnc, int *symbolDegSequence, int *checkDegSequence, char *filename, int sglConcent, int tgtGirth, int verbose);
   ~BigGirth();
@@ -34,7 +32,7 @@ private:
 
   char *filename;
 
-  std::unique_ptr< MatrixInt2D > H;
+  std::shared_ptr< MatrixInt2D > H;
   std::valarray< int > localGirth;
   std::vector< NodesInGraph > nodesInGraph;
   std::unique_ptr< Random > myrandom;

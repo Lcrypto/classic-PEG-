@@ -145,6 +145,7 @@
     <ClInclude Include="BigGirth.h" />
     <ClInclude Include="CyclesOfGraph.h" />
     <ClInclude Include="Random.h" />
+    <ClInclude Include="Utility.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BigGirth.cpp" />
