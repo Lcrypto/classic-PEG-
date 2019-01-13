@@ -1,5 +1,6 @@
 #include "BigGirth.h"
 #include "Random.h"
+#include "Utility.h"
 
 #include <cstdio>
 #include <cstdlib>
@@ -51,25 +52,6 @@ void NodesInGraph::initConnectionParityBit(int deg) {
   maxDegParity = deg;
 }
 
-
-class BigGirth::MatrixInt2D {
-public:
-  typedef int ValueType;
-
-public:
-  MatrixInt2D( std::size_t rowCount, std::size_t colCount ) 
-    : m_rowCount( rowCount ), m_colCount( colCount ), m_data( 0, rowCount * colCount ) { }
-
-  std::size_t GetColCount() const { return m_colCount; }
-  std::size_t GetRowCount() const { return m_rowCount; }
-
-  ValueType* operator[] ( std::size_t row ) { return &m_data[ row * m_colCount ]; } 
-
-private:
-  std::valarray< ValueType > m_data;
-  std::size_t m_rowCount;
-  std::size_t m_colCount;
-};
 
 BigGirth::BigGirth(int M, int N, int quickEnc, int *symbolDegSequence, int *checkDegSequence, char *filename, int sglConcent, int tgtGirth, int verbose){
   int i, j, k, m, index, localDepth=100;
