@@ -1,28 +1,21 @@
-
 #ifndef RANDOM
 #define RANDOM
 
-#include <stdlib.h>
-#include <iostream>
+class Random {
+public:
+  Random();
+  ~Random();
 
-class Random{
- private:
-
-  unsigned long int seed;  //previously LONG INT
-  unsigned long int seed_u;
+  static void Sort(int a[], int size);
   
- public:
-
-  Random(void) {
-    (*this).seed=987654321u;
-    (*this).seed_u=123456789lu;
-  }
-  ~Random(void){;}
-  void bubbleSort(int a[], int size);
   double gauss(double sdev, double mean);
   double uniform(double a, double b);
   int uniform(int  a, int b); // [a, b)
   int nonUniform(int  a, int b);
+
+private:
+  unsigned long int m_seed;
+  unsigned long int m_seed_u;
 
 }; 
 

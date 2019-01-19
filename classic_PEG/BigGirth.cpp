@@ -53,7 +53,7 @@ void NodesInGraph::initConnectionParityBit(int deg) {
 }
 
 
-BigGirth::BigGirth(int M, int N, int quickEnc, int *symbolDegSequence, int *checkDegSequence, char *filename, int sglConcent, int tgtGirth, int verbose){
+BigGirth::BigGirth(int M, int N, int quickEnc, int *symbolDegSequence, int *checkDegSequence, const char *filename, int sglConcent, int tgtGirth, int verbose){
   int i, j, k, m, index, localDepth=100;
   std::valarray< int > mid;
     
@@ -71,7 +71,7 @@ BigGirth::BigGirth(int M, int N, int quickEnc, int *symbolDegSequence, int *chec
 
   (*this).M = M;
   (*this).N = N;
-  (*this).filename = filename;
+  m_filename = filename;
 
   mid.resize( M );
   localGirth.resize( N );
@@ -472,8 +472,8 @@ void BigGirth::writeToFile_Hmatrix(void){
   //cout<<"----------------------------------------------------"<<endl;
 
   ofstream codefile;  
-  codefile.open(filename,ios::out);
-  codefile<<N<<" "<<M<<endl;
+  codefile.open( m_filename, ios::out );
+  codefile << N << " " << M << endl;
 
   for(i=0;i<M;i++){
     for(j=0;j<N;j++){
@@ -513,7 +513,7 @@ void BigGirth::writeToFile_Hcompressed(void){
   }
 
   ofstream codefile;  
-  codefile.open(filename,ios::out);
+  codefile.open( m_filename, ios::out );
   //codefile<<N<<endl;
   //codefile<<M<<endl;
   //codefile<<max_col<<endl;
@@ -673,7 +673,7 @@ void BigGirth::writeToFile(){
   cout<<"      Write to file (TEXT!) "<<endl;
   cout<<"****************************************************"<<endl;  
   ofstream codefile;  
-  codefile.open(filename,ios::out);
+  codefile.open( m_filename, ios::out );
   codefile<<N<<endl;
   codefile<<K<<endl;
   codefile<<M<<endl;
