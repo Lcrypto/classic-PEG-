@@ -12,7 +12,7 @@ class Random;
 
 class BigGirth {
 public:
-  BigGirth(int m, int n, int quickEnc, int *symbolDegSequence, int *checkDegSequence, char *filename, int sglConcent, int tgtGirth, int verbose);
+  BigGirth(int m, int n, int quickEnc, int *symbolDegSequence, int *checkDegSequence, const char *filename, int sglConcent, int tgtGirth, int verbose);
   ~BigGirth();
 
   void writeToFile_Hcompressed(void);
@@ -30,7 +30,7 @@ private:
   int K;
   int EXPAND_DEPTH;
 
-  char *filename;
+  std::string m_filename;
 
   std::shared_ptr< MatrixInt2D > H;
   std::valarray< int > localGirth;
