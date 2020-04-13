@@ -1,3 +1,3 @@
 # classic-PEG
-Progressive EDGE grownth for LDPC code construction 
+progressive edge growth for LDPC code construction  C++ implementation
 solved memmory issues and etc
