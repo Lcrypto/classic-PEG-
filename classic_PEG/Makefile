@@ -11,7 +11,7 @@ PROGRAM = MainPEG
 OBJECTS = main.o Random.o CyclesOfGraph.o BigGirth.o
 
 CC = g++
-CFLAGS = -g # -ansi -pedantic -Wno-deprecated -O3
+CFLAGS = -g -ansi -pedantic -Wno-deprecated -O3
 
 .SUFFIXES: .o .C
 
