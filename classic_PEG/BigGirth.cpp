@@ -532,6 +532,8 @@ void BigGirth::writeToFile_Hmatrix_alist(void){
   tmp.push_back(""); // list of degrees for CN
   int curr_idx = 2;
 
+  // Below can probably be optimized
+
   // VN
   int max_row=0, curr_row=0;
   for(j=0;j<N;j++) {
