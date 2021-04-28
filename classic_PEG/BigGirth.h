@@ -17,6 +17,7 @@ public:
 
   void writeToFile_Hcompressed(void);
   void writeToFile_Hmatrix(void);
+  void writeToFile_Hmatrix_alist(void);
   void writeToFile(void);
 
   void loadH();

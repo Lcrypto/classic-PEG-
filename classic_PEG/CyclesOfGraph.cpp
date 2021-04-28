@@ -2,6 +2,7 @@
 #include "Utility.h"
 
 #include <cstdlib>
+#include <cstring>
 #include <iostream>
 #include <valarray>
 
