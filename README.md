@@ -1,5 +1,5 @@
 # Progressive Edge Growth (PEG) for LDPC and QC-LDPC codes construction using C++, Matlab and Python including ACE maximization
-Progressive edge growth for LDPC ![C++](https://github.com/Lcrypto/classic-PEG-/tree/master/classic_PEG) (MS VS projetc classic_PEG.sln),  ![QC-LDPC PEG+ACE code construction](https://github.com/Lcrypto/classic-PEG-/tree/master/QC-LDPC%20ACE-PEG)   ,   ![Python](https://github.com/Lcrypto/classic-PEG-/blob/master/peg.py) and Matlab PEG+ACE implementations solved memmory issues and etc
+Progressive edge growth for LDPC ![C++](https://github.com/Lcrypto/classic-PEG-/tree/master/classic_PEG) (MS VS projetc classic_PEG.sln implementations solved memmory issues and etc),  ![QC-LDPC PEG+ACE code construction](https://github.com/Lcrypto/classic-PEG-/tree/master/QC-LDPC%20ACE-PEG)   ,   ![Python](https://github.com/Lcrypto/classic-PEG-/blob/master/peg.py) and [Matlab PEG+ACE](https://github.com/Lcrypto/classic-PEG-/blob/master/ProgressiveEdgeGrowthACE.m)
 
 
 Very beautifull PEG demo you can see using Anil Uzumcuoglu java implementation at https://uzum.github.io/ldpc-peg/
