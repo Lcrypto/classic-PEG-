@@ -1,3 +1,10 @@
 # Progressive edge growth for LDPC and QC-LDPC codes construction
-Progressive edge growth for LDPC code construction C++, Python and Matlab PEG+ACE implementations
-solved memmory issues and etc
+Progressive edge growth for LDPC and QC-LDPC code construction C++, Python and Matlab PEG+ACE implementations solved memmory issues and etc
+
+
+
+References:
+
+[1] Xiao-Yu Hu, E. Eleftheriou and D. M. Arnold, "Regular and irregular progressive edge-growth tanner graphs," in IEEE Transactions on Information Theory, vol. 51, no. 1, pp. 386-398, Jan. 2005, doi: 10.1109/TIT.2004.839541.
+
+[2] Tao Tian, C. R. Jones, J. D. Villasenor and R. D. Wesel, "Selective avoidance of cycles in irregular LDPC code construction," in IEEE Transactions on Communications, vol. 52, no. 8, pp. 1242-1247, Aug. 2004, doi: 10.1109/TCOMM.2004.833048.
