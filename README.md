@@ -2,7 +2,7 @@
 Progressive edge growth for LDPC and QC-LDPC code construction C++, Python and Matlab PEG+ACE implementations solved memmory issues and etc
 
 
-Very beautifull PEG demo you can see using java implementation at https://uzum.github.io/ldpc-peg/
+Very beautifull PEG demo you can see using Anil Uzumcuoglu java implementation at https://uzum.github.io/ldpc-peg/
 
 
 References:
