@@ -2,6 +2,8 @@
 Progressive edge growth for LDPC and QC-LDPC code construction C++, Python and Matlab PEG+ACE implementations solved memmory issues and etc
 
 
+Very beutifull demo of this algorithm you can see using java implementaion from https://uzum.github.io/ldpc-peg/
+
 
 References:
 
