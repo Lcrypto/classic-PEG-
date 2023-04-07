@@ -17,7 +17,7 @@ Input parameters:
     output_fname : "test.qc" #Output file useable with aff3ct
 
 Output:
-A .qc specifying a QC-LDPC file with large local girths, readable by the C++ ECC library Aff3ct.
+A .qc specifying a QC-LDPC file with large local girths, readable by the qc2sparse.m script,  C++ ECC library Aff3ct.
 
 ## SOURCES:
 PEG-Like Design of Binary QC-LDPC Codes Based on Detecting and Avoiding Generating Small Cycles:
