@@ -1,0 +1,7 @@
+n : 73  #Number of variable nodes (columns) in protograph
+m : 9   #Number of check nodes (rows) in protograph
+scaling_factor : 8  #Scaling of the protograph, often refered to as N
+girth_search_depth : 1 #Maximum depth of the DFS search algorithm to calculate potential girth
+seed : None #Randomness seed, set to None to pick a new one every time.
+input_fname : "../density_evolution/data/test.npz" #Input from the density_evolution_script.
+output_fname : "test.qc" #Output file useable with aff3ct
