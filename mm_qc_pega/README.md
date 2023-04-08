@@ -20,9 +20,7 @@ Output:
 A .qc specifying a QC-LDPC file with large local girths, readable by the qc2sparse.m script https://github.com/Lcrypto/Algebraic_QC-LDPC, 5G simulation tool https://github.com/Lcrypto/Simple-platform-to-Study-5G-LDPC-codes-and-decoders or C++ ECC library Aff3ct  https://aff3ct.github.io/ .
 
 ## SOURCES:
-PEG-Like Design of Binary QC-LDPC Codes Based on Detecting and Avoiding Generating Small Cycles:
-https://ieeexplore.ieee.org/document/8241708
+[1] X. He, L. Zhou and J. Du, "PEG-Like Design of Binary QC-LDPC Codes Based on Detecting and Avoiding Generating Small Cycles," in IEEE Transactions on Communications, vol. 66, no. 5, pp. 1845-1858, May 2018 https://ieeexplore.ieee.org/document/8241708
 
-A modified peg algorithm for construction of ldpc codes
-with strictly concentrated check-node degree distributions:
+[2] H. Chen and Z. Cao, "A Modified PEG Algorithm for Construction of LDPC Codes with Strictly Concentrated Check-Node Degree Distributions," 2007 IEEE Wireless Communications and Networking Conference, Hong Kong, China, 2007
 https://ieeexplore.ieee.org/document/4224354
