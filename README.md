@@ -1,8 +1,12 @@
 # Progressive Edge Growth (PEG) for LDPC and QC-LDPC codes construction using C++, Matlab and Python including ACE maximization and Avoiding Generating Small Cycles 
-Progressive edge growth for LDPC [C++](https://github.com/Lcrypto/classic-PEG-/tree/master/classic_PEG) (MS VS projetc classic_PEG.sln implementations solved memmory issues and etc) ,  [Python PEG](https://github.com/Lcrypto/classic-PEG-/blob/master/peg.py), [Python Modified PEG Algorithm  Avoiding Generating Small Cycles](https://github.com/Lcrypto/classic-PEG-/tree/master/mm_qc_pega)  and [Matlab PEG+ACE](https://github.com/Lcrypto/classic-PEG-/blob/master/ProgressiveEdgeGrowthACE.m),  [QC-LDPC PEG+ACE C++ code construction](https://github.com/Lcrypto/classic-PEG-/tree/master/QC-LDPC%20ACE-PEG)  
 
 
-Very beautifull PEG demo you can see using Anil Uzumcuoglu java implementation at https://uzum.github.io/ldpc-peg/
+
+The GitHub repository contains different implementations of Progressive Edge Growth (PEG) methods for constructing Low-Density Parity-Check (LDPC) and Quasi-Cyclic Low-Density Parity-Check (QC-LDPC) codes. The implementations include [C++ using MS Visual Studio Project classic_PEG.sln with solve memory issues/effective structures used](https://github.com/Lcrypto/classic-PEG-/tree/master/classic_PEG), [Python classical PEG](https://github.com/Lcrypto/classic-PEG-/blob/master/peg.py), [Python Modified PEG Algorithm Avoiding Generating Small Cycles](https://github.com/Lcrypto/classic-PEG-/tree/master/mm_qc_pega), [Matlab PEG+ACE](https://github.com/Lcrypto/classic-PEG-/blob/master/ProgressiveEdgeGrowthACE.m), and [QC-LDPC PEG+ACE C++ code construction](https://github.com/Lcrypto/classic-PEG-/tree/master/QC-LDPC%20ACE-PEG)  .
+
+The repo provides various implementation options to create LDPC and QC-LDPC codes using the PEG algorithm, with each implementation having its own advantages and features. One can choose the implementation depending on their specific needs, such as ease of use, preferred programming language, or desired functionality.
+
+For an interesting demo, you can check out Anil Uzumcuoglu's Java implementation of PEG at https://uzum.github.io/ldpc-peg/. The demo showcases the progressive growth of edges in PEG, demonstrating how it constructs sparse graphs that form the basis of LDPC and QC-LDPC codes.
 
 
 References:
