@@ -19,8 +19,27 @@
 # Boston, MA 02110-1301, USA.
 #
 
+def find_smallest(array):
+    if len(array) == 1:
+        return 0
+    elif len(array) == 2:
+        if array[0] <= array[1]:
+            return 0
+        else:
+            return 1
+    else:
+        arrayA = array[:len(array)/2]
+        arrayB = array[(len(array)/2):]
+        smallA = find_smallest(arrayA)
+        smallB = find_smallest(arrayB)
+        if arrayA[smallA] <= arrayB[smallB]:
+            return smallA
+        else:
+            return len(arrayA) + smallB
+
+
+
 import numpy as np
-from find_smallest import find_smallest
 import copy
 
 class peg():
