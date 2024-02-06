@@ -484,6 +484,99 @@ void BigGirth::writeToFile_Hmatrix(void){
   codefile.close();
 }
 
+void BigGirth::writeToFile_Hmatrix_alist(void){
+  // See format at https://aff3ct.readthedocs.io/en/latest/user/simulation/parameters/codec/ldpc/decoder.html?highlight=alist
+  /**
+    # 'nVN' is the total number of variable nodes and 'nCN' is the total number of check nodes
+    nVN nCN
+    # 'dmax_VN' is the higher variable node degree and 'dmax_CN' is the higher check node degree
+    dmax_VN dmax_CN
+    # list of the degrees for each variable nodes
+    d_VN_{1} d_VN_{2} [...] d_VN_{nVN}
+    # list of the degrees for each check nodes
+    d_CN_{1} d_CN_{2} [...] d_CN_{nCN}
+    #
+    # -- Part 2 --
+    # each following line describes the check nodes connected to a variable node, the first
+    # check node index is '1' (and not '0')
+    # variable node '1'
+    VN_{1}_CN_{idx_1} [...] VN_{1}_CN_{idx_d_VN_{1}}
+    # variable node '2'
+    VN_{2}_CN_{idx_1} [...] VN_{2}_CN_{idx_d_VN_{2}}
+    [...]
+    # variable node 'nVN'
+    VN_{nVN}_CN_{idx_1} [...] VN_{nVN}_CN_{idx_d_VN_{nVN}}
+    #
+    # -- Part 3 --
+    # each following line describes the variables nodes connected to a check node, the first
+    # variable node index is '1' (and not '0')
+    # check node '1'
+    CN_{1}_VN_{idx_1} [...] CN_{1}_VN_{idx_d_CN_{1}}
+    # check node '2'
+    CN_{2}_VN_{idx_1} [...] CN_{2}_VN_{idx_d_CN_{2}}
+    [...]
+    # check node 'nCN'
+    CN_{nCN}_VN_{idx_1} [...] CN_{nCN}_VN_{idx_d_CN_{nCN}}
+   */
+
+  int i, j;
+
+  loadH();
+  ofstream codefile;  
+  codefile.open( m_filename, ios::out );
+  codefile << N << " " << M << endl;
+
+  // Temporary placeholder for connections while calculating max
+  std::vector<string> tmp;
+  tmp.push_back(""); // list of degrees for VN
+  tmp.push_back(""); // list of degrees for CN
+  int curr_idx = 2;
+
+  // Below can probably be optimized
+
+  // VN
+  int max_row=0, curr_row=0;
+  for(j=0;j<N;j++) {
+    tmp.push_back("");
+    for(i=0;i<M;i++) {
+      if ((*H)[i][j] == 1) {
+        curr_row++;
+        tmp[curr_idx].append(std::to_string(i + 1)).append(" ");
+      }
+    }
+    if (curr_row > max_row)
+      max_row = curr_row;
+    tmp[0].append(std::to_string(curr_row)).append(" ");
+    curr_row = 0;
+    curr_idx++;
+  }
+
+  // CN
+  int max_col=0, curr_col=0;
+  for(i=0;i<M;i++) {
+    tmp.push_back("");
+    for(j=0;j<N;j++) {
+      if ((*H)[i][j] == 1) {
+        curr_col++;
+        tmp[curr_idx].append(std::to_string(j + 1)).append(" ");
+      }
+    }
+    if (curr_col > max_col)
+      max_col = curr_col;
+    tmp[1].append(std::to_string(curr_col)).append(" ");
+    curr_col = 0;
+    curr_idx++;
+  }
+
+  codefile << max_row << " " << max_col << endl;
+
+  for(i=0;i<curr_idx;i++) {
+    tmp[i].pop_back();          // Remove trailing space character
+    codefile << tmp[i] << endl;
+  }
+  codefile.close();
+}
+
 void BigGirth::writeToFile_Hcompressed(void){
   int i, j, max_col;
   

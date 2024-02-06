@@ -413,8 +413,9 @@ try
   BigGirth bigGirth(M, N, quickEnc, varSeq, chkSeq, codeName.c_str(), sglConcent, targetGirth, verbose);
   
   //bigGirth.writeToFile_Hcompressed();
-  bigGirth.writeToFile_Hmatrix();        //  different output format
+  //bigGirth.writeToFile_Hmatrix();        //  different output format
   //bigGirth.writeToFile();               //  different output format: including generator matrix (compressed)
+  bigGirth.writeToFile_Hmatrix_alist();
   
   //computing local girth distribution  
   /*if(N<10000) {
