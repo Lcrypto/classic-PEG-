@@ -8,7 +8,7 @@
 # Thu May 12 12:38:41 SAST 2005
 
 PROGRAM = MainPEG
-OBJECTS = MainPEG.o Random.o CyclesOfGraph.o BigGirth.o
+OBJECTS = main.o Random.o CyclesOfGraph.o BigGirth.o
 
 CC = g++
 CFLAGS = -g -ansi -pedantic -Wno-deprecated -O3
@@ -16,12 +16,12 @@ CFLAGS = -g -ansi -pedantic -Wno-deprecated -O3
 .SUFFIXES: .o .C
 
 all: ${OBJECTS}
-        $(CC) -o ${PROGRAM} ${OBJECTS}
+	$(CC) ${CFLAGS} -o ${PROGRAM} ${OBJECTS}
 
 .C.o: $<
-        $(CC) ${CFLAGS} -c $< -o $@
+	$(CC) ${CFLAGS} -c $< -o $@
 
 .PHONY : clean
 
 clean:
-        rm -f ${OBJECTS} ${PROGRAM}
+	rm -f ${OBJECTS} ${PROGRAM}
